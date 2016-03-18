@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 require('./app_server/models/db');  //bring db.js file into app
+//required this file near top, so that the connection opens up early on in the app's life
 
 var routes = require('./app_server/routes/index');
 var users = require('./app_server/routes/users');
