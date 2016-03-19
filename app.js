@@ -4,10 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-require('./app_server/models/db');  //bring db.js file into app
+require('./app_api/models/db');  //bring db.js file into app
 //required this file near top, so that the connection opens up early on in the app's life
 
 var routes = require('./app_server/routes/index');
+var routesApi = require('./app_api/routes/index');  //tell app that we are adding more routes to look out for
 var users = require('./app_server/routes/users');
 
 var app = express();
@@ -24,7 +25,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//below lines tell app to check server app routes for all incoming requests
+//tell app when to use the routes
 app.use('/', routes);
+app.use('/api', routesApi); //use API routes only when route starts with /api
 app.use('/users', users);
 
 // catch 404 and forward to error handler
