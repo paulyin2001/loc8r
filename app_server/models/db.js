@@ -1,6 +1,10 @@
 var mongoose = require('mongoose');
 
 var dbURI = 'mongodb://localhost/Loc8r';
+console.log('NODE_ENV: '+process.env.NODE_ENV);	//debug
+if(process.env.NODE_ENV === 'production'){
+	dbURI = process.env.MONGOLAB_URI;	//use URI env var in Heroku
+}
 mongoose.connect(dbURI);
 
 var readLine = require('readline');
