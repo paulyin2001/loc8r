@@ -28,6 +28,8 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 2. What are other things I can use with app.set?
 3. Can Jade template connect with Reactjs?
 4. What are callbacks and scopes of Javascrip? Why are they important? How do I practice?
+5. What would (!undefined) be evaluated? Would it be true?
+6. What would req.params && req.params.locationid be evaluated? In console, there are [object Object] with undefined or a string
 
 #### Road map of the app:
 1. Finish up loc8r
