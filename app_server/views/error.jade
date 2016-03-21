@@ -4,6 +4,9 @@ block content
   #banner.page-header
     .row
       .col-md-6.col-sm-12
-        h1= message
-        h2= error.status
+        h1 error
+  .row
+    .col-md-6.col-sm-12
+        p= message
+        p= error.status
         pre #{error.stack}

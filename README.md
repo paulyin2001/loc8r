@@ -30,7 +30,9 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 4. What are callbacks and scopes of Javascrip? Why are they important? How do I practice?
 5. What would (!undefined) be evaluated? Would it be true?
 6. What would req.params && req.params.locationid be evaluated? In console, there are [object Object] with undefined or a string
-7. MongoDB: how do I easily insert, update and delete data without directly type in mongo shell? 
+7. MongoDB: how do I easily insert, update and delete data without directly type in mongo shell?
+8. What is Modular Javascript? How to write one?
+9. How do I have test driven developmet?
 
 #### Road map of the app:
 1. Finish up loc8r
