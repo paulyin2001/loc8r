@@ -12,12 +12,14 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 3. Use app.use in app.js for routing
 4. Use app.set to make REST API json response looks nice
 5. Build static site. Then, connect views and controllers with routes to create VC model
-6. Create REST API and test with Chrome app Postman
+6. Create REST API and test with Chrome app Postman. Use Postman "x-www-form-urlencoded" body type to test POST API
 
 ######MongoDB:
 1. Set up MongoDB as service in Windows 8.1
 2. Use Mongoose to define schemas for a data model
 3. Use mongo shell
+4. Use Mongoose to create GET, POST REST API
+5. Use geoNear, geoJSON to calculate distance
 
 ######Heroku:
 1. Use mLab MongoDB add-ons and connect app to production DB.
@@ -32,7 +34,9 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 6. What would req.params && req.params.locationid be evaluated? In console, there are [object Object] with undefined or a string
 7. MongoDB: how do I easily insert, update and delete data without directly type in mongo shell?
 8. What is Modular Javascript? How to write one?
-9. How do I have test driven developmet?
+9. How do I have test driven developmet with Nodejs to test every single function I create?
+10. What is a returned object parameter in Javascript function?
+11. What is "parseInt( total / count, 10)" in Javascript
 
 #### Road map of the app:
 1. Finish up loc8r

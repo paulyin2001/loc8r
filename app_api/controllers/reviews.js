@@ -36,7 +36,7 @@ module.exports.reviewsReadOne = function(req,res){
 						},
 						review: review
 					};
-					sendJsonResponse(res,200,response);
+					sendJsonResponse(res,200,response);		//send document found as JSON response
 				}
 			} 
 			else{
@@ -49,30 +49,34 @@ module.exports.reviewsReadOne = function(req,res){
 	else{
 		sendJsonResponse(res,404,{
 			"message": "Not found, locationid and reviewid are both required"
-		});		//send document found as JSON response
+		});
 	}
 };
-module.exports.locationsReadOne = function(req,res){
-	console.log('in locationsReadOne'+', req.params:'+req.params+', req.params.locationid:'+req.params.locationid);	//debug
-	if(req.params && req.params.locationid){	//check locationid and params exist			
-		//if Loc is undefined, browser will keep spinning. How do we debug this?
+
+module.exports.reviewsCreate = function(req,res){
+	if(req.params && req.params.locationid){
 		Loc
-			.findById(req.params.locationid)	//findById is mongoose model methods to query db. req.params give access to locationid
-			.exec(function(err, location){		//execute query
-				if(!location){									//if location is undefined, then it will be true. If Mongoose doesn't return a location...
-					console.log('location: '+location);	//debug
-					sendJsonResponse(res, 404, {				//send 404 message
-						"message": "locationid not found"
-					});
-					return;															//exit function scope using return statement
-				}
-				sendJsonResponse(res,200,location);		//send document found as JSON response
-			});
+		.findById(req.params.locationid)
+		.select('reviews')								//Mongoose select method will tell MongoDB to get the reviews of a location
+		.exec(function(err, location){		
+			if(!location){									//if location is undefined, then it will be true. If Mongoose doesn't return a location...
+				console.log('location: '+location);	//debug
+				sendJsonResponse(res, 404, {				//send 404 message
+					"message": "locationid not found"
+				});
+				return;															//exit function scope using return statement
+			}
+			else if(err){
+				sendJsonResponse(res,400,err);	//send 400 status bad request
+				return;
+			}
+
+			doAddReview(req,res,location);		//successful find operation will call new function to add
+		});
 	}
 	else{
-		// For now, this will only happen if I have line "router.get('/locations', ctrlLocations.locationsReadOne);" in routes
 		sendJsonResponse(res,404,{
-			"message": "No locationid in request"
+			"message": "Not found, locationid required"
 		});
 	}
 };
@@ -80,4 +84,61 @@ module.exports.locationsReadOne = function(req,res){
 var sendJsonResponse = function(res, status, content){
 	res.status(status);		//send response status code
 	res.json(content);		//send response JSON data
+};
+
+var doAddReview = function(req,res,location){
+	if(!location){								//add validation for being accessible from other controllers
+		sendJsonResponse(res, 404, {
+			"message": "locationid not found"
+		});
+	} else {
+		location.reviews.push({			//add a new object to an array by using Javascript push method
+			author: req.body.author,
+			rating: req.body.rating,
+			reviewText: req.body.reviewText
+		});
+		location.save(function(err,location){		//subdoc can't be saved on their own. Parent doc needs to use Mongoose save method.
+			var thisReview;
+			if(err){
+				sendJsonResponse(res,400,err);
+			} else {
+				console.log('location.reviews[0]: '+location.reviews[0]);
+				updateAverageRating(location._id);
+				thisReview = location.reviews[location.reviews.length - 1];
+				//find latest added review in array and return as JSON confirmation response
+				sendJsonResponse(res,201,thisReview);
+			}
+		})
+	}
+};
+
+var updateAverageRating = function(locationid){
+	Loc
+		.findById(locationid)
+		.select('rating reviews')
+		.exec(function(err,location){
+			if(!err){
+				doSetAverageRating(location);
+			}
+		});
+};
+
+var doSetAverageRating = function(location){
+	var i, reviewCount, ratingAverage, ratingTotal;
+	if(location.reviews && location.reviews.length > 0){
+		reviewCount = location.reviews.length;
+		ratingTotal = 0;
+		for(i = 0; i< reviewCount; i++){
+			ratingTotal = ratingTotal + location.reviews[i].rating;
+		}
+		ratingAverage = parseInt(ratingTotal / reviewCount, 10);
+		location.rating = ratingAverage;
+		location.save(function(err){
+			if(err){
+				console.log(err);
+			} else {
+				console.log("Average rating updated to", ratingAverage);
+			}
+		});
+	}
 };
