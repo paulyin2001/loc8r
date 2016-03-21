@@ -8,7 +8,8 @@ module.exports.locationsCreate = function(req,res){
 };
 module.exports.locationsReadOne = function(req,res){
 	console.log('in locationsReadOne'+', req.params:'+req.params+', req.params.locationid:'+req.params.locationid);	//debug
-	if(req.params && req.params.locationid){	//check locationid and params exist
+	if(req.params && req.params.locationid){	//check locationid and params exist			
+		//if Loc is undefined, browser will keep spinning. How do we debug this?
 		Loc
 			.findById(req.params.locationid)	//findById is mongoose model methods to query db. req.params give access to locationid
 			.exec(function(err, location){		//execute query

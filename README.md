@@ -30,6 +30,7 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 4. What are callbacks and scopes of Javascrip? Why are they important? How do I practice?
 5. What would (!undefined) be evaluated? Would it be true?
 6. What would req.params && req.params.locationid be evaluated? In console, there are [object Object] with undefined or a string
+7. MongoDB: how do I easily insert, update and delete data without directly type in mongo shell? 
 
 #### Road map of the app:
 1. Finish up loc8r
@@ -38,3 +39,4 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 4. Use Reactjs instead of Angularjs
 
 #### Bugs I faced and learn how to resolve:
+1. Mongoose subdoc find id is not working -> check out the JSON again and the id should be writTen as "_id" and not just "id"
