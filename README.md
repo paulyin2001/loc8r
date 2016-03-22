@@ -34,15 +34,16 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 3. Can Jade template connect with Reactjs?
 4. What are callbacks and scopes of Javascrip? Why are they important? How do I practice?
 5. What would (!undefined) be evaluated? Would it be true?
-	Answer: Yes it will be true.
+  * Answer: Yes it will be true. [javascript reference] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling#Falsy_values)
 6. What would req.params && req.params.locationid be evaluated? In console, there are [object Object] with undefined or a string
-	Answer: As long as it is undefined, it will be evaluated as false
+  * Answer: As long as it is undefined, it will be evaluated as false
 7. MongoDB: how do I easily insert, update and delete data without directly type in mongo shell?
 8. What is Modular Javascript? How to write one?
 9. How do I have test driven developmet with Nodejs to test every single function I create?
 10. What is a returned object parameter in Javascript function?
-	Answer: it is like a variable will certainly be returned. Kind of like a pointer be overwritten in C.
+  * Answer: it is like a variable will certainly be returned. Kind of like a pointer be overwritten in C.
 11. What is "parseInt( total / count, 10)" in Javascript?
+  * Answer: see [javascript reference] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt)
 12. After using PUT REST API, the location has one more path "__v". What is this?
 
 #### Road map of the app:
@@ -53,4 +54,4 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 
 #### Hard bugs I faced and learn how to resolve:
 1. Mongoose subdoc find id is not working
-	Solution: check out the JSON again and the id should be writTen as "_id" and not just "id"
+  * Solution: check out the JSON again and the id should be written as "_id" and not just "id"
