@@ -14,7 +14,7 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 5. Build static site. Then, connect views and controllers with routes to create VC model
 6. Create REST API and test with Chrome app Postman. Use Postman "x-www-form-urlencoded" body type to test POST API
 
-######MongoDB:
+######MongoDB, Mongoose:
 1. Set up MongoDB as service in Windows 8.1
 2. Use Mongoose to define schemas for a data model
 3. Use mongo shell
@@ -34,7 +34,7 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 3. Can Jade template connect with Reactjs?
 4. What are callbacks and scopes of Javascrip? Why are they important? How do I practice?
 5. What would (!undefined) be evaluated? Would it be true?
-  * Answer: Yes it will be true. [javascript reference] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling#Falsy_values)
+  * Answer: Yes it will be true. [javascript reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling#Falsy_values)
 6. What would req.params && req.params.locationid be evaluated? In console, there are [object Object] with undefined or a string
   * Answer: As long as it is undefined, it will be evaluated as false
 7. MongoDB: how do I easily insert, update and delete data without directly type in mongo shell?
@@ -43,7 +43,7 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 10. What is a returned object parameter in Javascript function?
   * Answer: it is like a variable will certainly be returned. Kind of like a pointer be overwritten in C.
 11. What is "parseInt( total / count, 10)" in Javascript?
-  * Answer: see [javascript reference] (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt)
+  * Answer: see [javascript reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt)
 12. After using PUT REST API, the location has one more path "__v". What is this?
 
 #### Road map of the app:
@@ -55,3 +55,5 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 #### Hard bugs I faced and learn how to resolve:
 1. Mongoose subdoc find id is not working
   * Solution: check out the JSON again and the id should be written as "_id" and not just "id"
+2. DELETE REST API error: Can't set headers after they are sent. It does delete review, but the error put a hold on the server.
+  * Soluction: call sendJsonResponse twice and update res.status twice. Make sure only 1 res being sent. [reference](http://stackoverflow.com/questions/7042340/node-js-error-cant-set-headers-after-they-are-sent)

@@ -72,7 +72,7 @@ module.exports.locationsCreate = function(req,res){
 };
 
 module.exports.locationsReadOne = function(req,res){
-	console.log('in locationsReadOne'+', req.params:'+req.params+', req.params.locationid:'+req.params.locationid);	//debug
+	//console.log('in locationsReadOne'+', req.params:'+req.params+', req.params.locationid:'+req.params.locationid);	//debug
 	if(req.params && req.params.locationid){	//check locationid and params exist			
 		//if Loc is undefined, browser will keep spinning. How do we debug this?
 		Loc
@@ -147,7 +147,22 @@ module.exports.locationsUpdateOne = function(req,res){
 };
 
 module.exports.locationsDeleteOne = function(req,res){
-	res.render('layout', { title: 'locationsDeleteOne' });
+	if(req.params && req.params.locationid){			
+		Loc
+			.findByIdAndRemove(req.params.locationid)		//http://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove
+			.exec(function(err, location){
+				if(err){
+					sendJsonResponse(res, 404, err);
+					return;
+				}					
+				sendJsonResponse(res,204,null);		//204 means successfully delete content
+			});
+	}
+	else{
+		sendJsonResponse(res,404,{
+			"message": "No locationid in request"
+		});
+	}
 };
 
 var sendJsonResponse = function(res, status, content){

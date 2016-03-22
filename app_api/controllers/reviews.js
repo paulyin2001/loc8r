@@ -135,6 +135,56 @@ module.exports.reviewsUpdateOne = function(req,res){
 	
 };
 
+module.exports.reviewsDeleteOne = function(req,res){
+	if(!(req.params && req.params.locationid && req.params.reviewid)) {
+		sendJsonResponse(res,404,{
+			"message": "Not found, locationid and reviewid are both required"
+		});
+	}
+
+	Loc
+	.findById(req.params.locationid)
+	.select('name reviews')
+	.exec(function(err, location){		
+		var response, review;
+		if(!location){
+			sendJsonResponse(res, 404, {				//send 404 message
+				"message": "locationid not found"
+			});
+			return;
+		}
+		else if(err){
+			sendJsonResponse(res,400,err);	//send 400 status bad request
+			return;
+		}
+
+		if(location.reviews && location.reviews.length > 0){
+			review = location.reviews.id(req.params.reviewid);	//Use Mongoose subdocument.id method for searching for matching
+			if(!review){
+				sendJsonResponse(res, 404, {
+					"message": "reviewid not found "+req.params.reviewid
+				});
+			} 
+			else{
+				review.remove();
+				location.save(function(err){		//use Model#save
+					if(err){
+						sendJsonResponse(res,404,err);
+					} else {
+						updateAverageRating(location._id);
+						sendJsonResponse(res,204,null);
+					}
+				});
+			}
+		} 
+		else{
+			sendJsonResponse(res,404, {
+				"message": "No reviews found in location"
+			});
+		}
+	});
+};
+
 var sendJsonResponse = function(res, status, content){
 	res.status(status);		//send response status code
 	res.json(content);		//send response JSON data
@@ -156,7 +206,7 @@ var doAddReview = function(req,res,location){
 			if(err){
 				sendJsonResponse(res,400,err);
 			} else {
-				console.log('location.reviews[0]: '+location.reviews[0]);
+				//console.log('location.reviews[0]: '+location.reviews[0]);
 				updateAverageRating(location._id);
 				thisReview = location.reviews[location.reviews.length - 1];
 				//find latest added review in array and return as JSON confirmation response
