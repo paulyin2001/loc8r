@@ -30,7 +30,7 @@ var locationSchema = new mongoose.Schema({	//constructor func for new schema
 	//when running queries and return results. It allows MongoDB to calculate geometries
 	//based on a spherical object.
 	//Coordinate pair must be entered in order: longitude then latitude
-	openingTime: [openingTimeSchema],
+	openingTimes: [openingTimeSchema],
 	reviews: [reviewSchema]
 });
 

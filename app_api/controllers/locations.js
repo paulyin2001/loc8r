@@ -97,7 +97,53 @@ module.exports.locationsReadOne = function(req,res){
 };
 
 module.exports.locationsUpdateOne = function(req,res){
-	res.render('layout', { title: 'locationsUpdateOne' });
+	if(!req.params.locationid){	//check locationid and params exist
+		sendJsonResponse(res,404,{
+			"message": "No locationid in request"
+		});
+		return;
+	}
+	Loc
+		.findById(req.params.locationid)	//findById is mongoose model methods to query db. req.params give access to locationid
+		.select('-reviews -rating')				//don't query reviews and rating path
+		.exec(function(err, location){		//execute query
+			if(!location){
+				sendJsonResponse(res, 404, {				//send 404 message
+					"message": "locationid not found"
+				});
+				return;															//exit function scope using return statement
+			}
+			location.name = req.body.name;
+			if(req.body.address){
+				location.address = req.body.address;
+			}
+			if(req.body.facilities){				//prevent 'split' of undefined error
+				location.facilities = req.body.facilities.split(',');
+		  }
+		  if(req.body.coords){						//prevent Cast to Array failed error
+		  	location.coords = [parseFloat(req.body.lng),parseFloat(req.body.lat)];
+		  }
+		  console.log(location+" openingTimes: "+location.openingTimes);
+		  location.openingTimes = [{
+		  	days: req.body.days1,
+		  	opening: req.body.opening1,
+		  	closing: req.body.closing1,
+		  	closed: req.body.closed1
+		  },{
+		  	days: req.body.days2,
+		  	opening: req.body.opening2,
+		  	closing: req.body.closing2,
+		  	closed: req.body.closed2
+		  }];
+		  location.save(function(err,location){
+		  	if(err){
+		  		console.log(err);
+		  		sendJsonResponse(res, 404, err);
+		  	} else {
+		  		sendJsonResponse(res,200,location);
+		  	}
+		  });
+		});
 };
 
 module.exports.locationsDeleteOne = function(req,res){

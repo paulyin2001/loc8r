@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');		//give controllers access to db
-var Loc = mongoose.model('Location');	//bring in Location model
+var Loc = mongoose.model('Location');	//create a Location model
 module.exports.reviewsReadOne = function(req,res){
 	if(req.params && req.params.locationid && req.params.reviewid){
 		Loc
-		.findById(req.params.locationid)
+		.findById(req.params.locationid)	//find document and return query
 		.select('name reviews')						//Mongoose select method will tell MongoDB to get the name and the reviews of a location
 		.exec(function(err, location){		
 			
@@ -79,6 +79,60 @@ module.exports.reviewsCreate = function(req,res){
 			"message": "Not found, locationid required"
 		});
 	}
+};
+
+module.exports.reviewsUpdateOne = function(req,res){
+	if(!req.params.locationid){
+		sendJsonResponse(res,404,{
+			"message": "Not found, locationid required"
+		});
+		return;
+	}
+
+	Loc
+	.findById(req.params.locationid)
+	.select('reviews')								//Mongoose select method will tell MongoDB to get the reviews of a location
+	.exec(function(err, location){	
+		var reviewToUpdate;	
+		if(!location){									//if location is undefined, then it will be true
+			console.log('location: '+location);	//debug
+			sendJsonResponse(res, 404, {				//send 404 message
+				"message": "locationid not found"
+			});
+			return;															//exit function scope using return statement
+		}
+		else if(err){
+			sendJsonResponse(res,400,err);	//send 400 status bad request
+			return;
+		}
+
+		if(location.reviews && location.reviews.length > 0){
+			reviewToUpdate = location.reviews.id(req.params.reviewid);
+			console.log('reviewToUpdate: '+reviewToUpdate);
+			if(reviewToUpdate != null){
+				reviewToUpdate.author = req.body.author;
+				reviewToUpdate.rating = req.body.rating;
+				reviewToUpdate.reviewText = req.body.reviewText;
+				location.save(function(err,location){
+					if(err){
+						sendJsonResponse(res, 404, err);
+					} else {
+						updateAverageRating(req.params.locationid);
+						sendJsonResponse(res, 200, reviewToUpdate);
+					}
+				});
+			} else {
+				sendJsonResponse(res, 404, {
+					"message": "No reviews found to update"
+				});
+			}
+		} else {
+			sendJsonResponse(res, 404, {
+				"message": "Not found, locationid and reviewid are both required"
+			});
+		}
+	});
+	
 };
 
 var sendJsonResponse = function(res, status, content){

@@ -1,3 +1,4 @@
+//reference: http://mongoosejs.com/docs/index.html
 var mongoose = require('mongoose');
 
 var dbURI = 'mongodb://localhost/Loc8r';
