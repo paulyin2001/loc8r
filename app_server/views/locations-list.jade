@@ -9,6 +9,8 @@ block content
           small= ' '+pageHeader.strapline
   .row
     .col-xs-12.col-sm-8
+      .error= message
+      //add a div into main content area and have it display a message if one is sent
       .row.list-group
         each location in locations
           .col-xs-12.list-group-item

@@ -12,7 +12,7 @@ module.exports.locationsListByDistance = function(req,res){
 	var geoOptions = {
 		spherical: true,		//Determine whether the search will be done by spherical object or a flat plane
 		num: 10,						//show up to 10 results
-		maxDistance: theEarth.getRadsFromDistance(10000)	//set max distance to 10000 miles
+		maxDistance: theEarth.getRadsFromDistance(req.query.maxDistance)	//set max distance to 10000 miles
 	};
 	if(!lng || !lat){
 		sendJsonResponse(res,404,{

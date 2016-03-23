@@ -56,4 +56,6 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 1. Mongoose subdoc find id is not working
   * Solution: check out the JSON again and the id should be written as "_id" and not just "id"
 2. DELETE REST API error: Can't set headers after they are sent. It does delete review, but the error put a hold on the server.
-  * Soluction: call sendJsonResponse twice and update res.status twice. Make sure only 1 res being sent. [reference](http://stackoverflow.com/questions/7042340/node-js-error-cant-set-headers-after-they-are-sent)
+  * Solution: call sendJsonResponse twice and update res.status twice. Make sure only 1 res being sent. [reference](http://stackoverflow.com/questions/7042340/node-js-error-cant-set-headers-after-they-are-sent)
+3. No "API lookup error" shows.
+  * Solution: condition (!x instanse of Array) should be written as (!(x instance of Array)) to check whether x is Array

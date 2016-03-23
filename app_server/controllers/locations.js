@@ -18,15 +18,20 @@ module.exports.homelist = function(req,res){
 		qs: {
 			lng: -0.9690885,
 			lat: 51.455040,
-			maxDistance: 10000
+			maxDistance: 1000
 		}
 	};
 	request(												//use request(options,callback) to custom HTTP headers https://github.com/request/request#custom-http-headers
 		requestOptions,
 		function(err,response,body){
-			if(!err && response.statusCode == 200){
-				renderHomepage(res,body);		//use rendering function with requested body
+			var i, data;
+			data = body;
+			if(!err && response.statusCode == 200 && data.length){		//only run loop if API return 200, there is some data
+				for(i=0; i<data.length; i++){						//loop through each location and parse distance from something like 14.xxxxxxxxxx to 14.x miles
+					data[i].distance = _formatDistance(data[i].distance);
+				}
 			}
+			renderHomepage(res,body);		//use rendering function with requested body
 		}
 	);
 
@@ -90,6 +95,19 @@ module.exports.addReview = function(req,res){
 };
 
 var renderHomepage = function(res, responseBody){	
+	var message;
+	console.log('responseBody:');
+	console.log(responseBody);
+	console.log(!(responseBody instanceof Array));
+	console.log(responseBody.length);
+	if(!(responseBody instanceof Array)){		//if response isn't array, set message and responseBody
+		message = 'API lookup error';
+		responseBody = [];									//view is expecting an array. prevent view from throwing error
+	} else {
+		if(!responseBody.length){						//if response is array with no length
+			message = "No places found nearby";
+		}
+	}
 	res.render('locations-list',{
 		title: 'Loc8r - find place to work with wifi',
 		pageHeader:{
@@ -99,7 +117,14 @@ var renderHomepage = function(res, responseBody){
 		sidebar: "Looking for wifi and a seat? Loc8r helps you find "+
 		"places to work when out and about. Perhaps with coffee, cake "+
 		"or a pint? Let Loc8r help you find the place you're looking for.",
-		locations: responseBody
+		locations: responseBody,
+		message: message										//add message to send to view
 	});
 };
 
+var _formatDistance = function(distance){
+	var numDistance, unit;
+	numDistance = parseFloat(distance).toFixed(1);
+	unit = ' miles';
+	return numDistance + unit;
+};
