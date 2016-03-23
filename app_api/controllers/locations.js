@@ -1,6 +1,14 @@
 var mongoose = require('mongoose');		//give controllers access to db
 var Loc = mongoose.model('Location');	//bring in Location model
 
+var request = require('request');
+var apiOptions = {		//API call with request must have fully qualified URL
+	server: 'http://localhost:3000'
+};										//switch URL depends on environment
+if(process.env.NODE_ENV === 'production'){
+	apiOptions.server = "https://learnmean.herokuapp.com"
+}
+
 module.exports.locationsListByDistance = function(req,res){
 	var lng = parseFloat(req.query.lng);	//get coordinates from query string
 	var lat = parseFloat(req.query.lat);	//and convert from strings to numbers
