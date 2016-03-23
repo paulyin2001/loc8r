@@ -1,35 +1,35 @@
+var request = require('request');
+var apiOptions = {		//API call with request must have fully qualified URL
+	server: 'http://localhost:3000'
+};										//switch URL depends on environment
+if(process.env.NODE_ENV === 'production'){
+	apiOptions.server = "https://learnmean.herokuapp.com"
+}
+
 /* GET 'home' page */
 module.exports.homelist = function(req,res){
-	res.render('locations-list', { 
-		title: 'Loc8r - find a place to work with wifi',
-		pageHeader: {
-			title: 'Loc8r',
-			strapline: 'Find places to work with wifi near you!'
-		},
-		sidebar: "Looking for wifi and a seat? Loc8r helps you find " + 
-		"places to work when out and about. Perhaps with coffee, cake " +
-		"or a pint? Let Loc8r help you find the place you're looking for."
-		,
-		locations: [{
-			name: 'Starcups',
-			address: '125 High Street, Reading, RG6 1PS',
-			rating: 3,
-			facilities: ['Hot drinks', 'Food', 'Premium wifi'],
-			distance: '100m'
-		},{
-			name: 'Cafe Hero',
-			address: '125 High Street, Reading, RG6 2PS',
-			rating: 4,
-			facilities: ['Premium wifi'],
-			distance: '200m'
-		},{
-			name: 'Burger Queen',
-			address: '125 High Street, Reading, RG6 3PS',
-			rating: 2,
-			facilities: ['Food', 'Premium wifi'],
-			distance: '250m'
-		}]
-	});
+
+	var requestOptions, path;
+	path = '/api/locations';		// set path for API request
+	requestOptions = {
+		url: apiOptions.server + path,
+		method: "GET",
+		json: {},
+		qs: {
+			lng: -0.9690885,
+			lat: 51.455040,
+			maxDistance: 10000
+		}
+	};
+	request(												//use request(options,callback) to custom HTTP headers https://github.com/request/request#custom-http-headers
+		requestOptions,
+		function(err,response,body){
+			if(!err && response.statusCode == 200){
+				renderHomepage(res,body);		//use rendering function with requested body
+			}
+		}
+	);
+
 };
 /* Get 'Location info' page */
 module.exports.locationInfo = function(req,res){
@@ -88,3 +88,18 @@ module.exports.addReview = function(req,res){
 		}
 	});
 };
+
+var renderHomepage = function(res, responseBody){	
+	res.render('locations-list',{
+		title: 'Loc8r - find place to work with wifi',
+		pageHeader:{
+			title: 'Loc8r',
+			strapline: 'Find places to work with wifi near you!'
+		},
+		sidebar: "Looking for wifi and a seat? Loc8r helps you find "+
+		"places to work when out and about. Perhaps with coffee, cake "+
+		"or a pint? Let Loc8r help you find the place you're looking for.",
+		locations: responseBody
+	});
+};
+
