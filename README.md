@@ -45,6 +45,7 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
 11. What is "parseInt( total / count, 10)" in Javascript?
   * Answer: see [javascript reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt)
 12. After using PUT REST API, the location has one more path "__v". What is this?
+13. What is req.body?
 
 #### Road map of the app:
 1. Finish up loc8r

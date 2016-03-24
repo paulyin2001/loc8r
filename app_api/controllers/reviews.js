@@ -54,6 +54,8 @@ module.exports.reviewsReadOne = function(req,res){
 };
 
 module.exports.reviewsCreate = function(req,res){
+	console.log('reviewsCreate');
+	console.log('locationid: '+req.params.locationid);
 	if(req.params && req.params.locationid){
 		Loc
 		.findById(req.params.locationid)
