@@ -52,7 +52,7 @@ module.exports.addReview = function(req,res){
 module.exports.doAddReview = function(req,res){
 	var requestOptions, path, locationid, postdata;
 	locationid = req.params.locationid;
-	var postdata = {
+	postdata = {
 		author: req.body.name,
 		rating: parseInt(req.body.rating, 10),
 		reviewText: req.body.review
@@ -63,22 +63,26 @@ module.exports.doAddReview = function(req,res){
 		method: "POST",
 		json: postdata
 	};
-	request(
-		requestOptions,
-		function(err,response,body){
-			console.log('doAddReview');
-			console.log('postdata:' + JSON.stringify(postdata));
-			console.log('statusCode: '+response.statusCode);
-			if(!err && response.statusCode === 201){
-				res.redirect('/location/' + locationid);
-			} else if (response.statusCode === 400 && body.name && body.name === "ValidationError"){
-				res.redirect('/location/'+locationid+'/reviews/new?err=val');		//passing an error flag in query string
-			} else {
-				_showError(req,res,response.statusCode);
-				console.log(response.message);
+	if(!postdata.author || !postdata.rating || !postdata.reviewText){		//reduce unnecessary API call by validating at API level
+		res.redirect('/location/' + locationid + '/reviews/new?err=val');
+	} else {
+		request(
+			requestOptions,
+			function(err,response,body){
+				console.log('doAddReview');
+				console.log('postdata:' + JSON.stringify(postdata));
+				console.log('statusCode: '+response.statusCode);
+				if(!err && response.statusCode === 201){
+					res.redirect('/location/' + locationid);
+				} else if (response.statusCode === 400 && body.name && body.name === "ValidationError"){
+					res.redirect('/location/'+locationid+'/reviews/new?err=val');		//passing an error flag in query string
+				} else {
+					_showError(req,res,response.statusCode);
+					console.log(response.message);
+				}
 			}
-		}
-	);
+		);
+	}
 };
 
 var renderHomepage = function(res, responseBody){	
