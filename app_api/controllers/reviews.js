@@ -69,6 +69,7 @@ module.exports.reviewsCreate = function(req,res){
 				return;															//exit function scope using return statement
 			}
 			else if(err){
+				console.log(err);
 				sendJsonResponse(res,400,err);	//send 400 status bad request
 				return;
 			}
@@ -193,6 +194,7 @@ var sendJsonResponse = function(res, status, content){
 };
 
 var doAddReview = function(req,res,location){
+	console.log('------------------------------API doAddReivew');
 	if(!location){								//add validation for being accessible from other controllers
 		sendJsonResponse(res, 404, {
 			"message": "locationid not found"
@@ -206,6 +208,7 @@ var doAddReview = function(req,res,location){
 		location.save(function(err,location){		//subdoc can't be saved on their own. Parent doc needs to use Mongoose save method.
 			var thisReview;
 			if(err){
+				console.log(err);
 				sendJsonResponse(res,400,err);
 			} else {
 				//console.log('location.reviews[0]: '+location.reviews[0]);

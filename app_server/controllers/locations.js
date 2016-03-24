@@ -71,6 +71,8 @@ module.exports.doAddReview = function(req,res){
 			console.log('statusCode: '+response.statusCode);
 			if(!err && response.statusCode === 201){
 				res.redirect('/location/' + locationid);
+			} else if (response.statusCode === 400 && body.name && body.name === "ValidationError"){
+				res.redirect('/location/'+locationid+'/reviews/new?err=val');		//passing an error flag in query string
 			} else {
 				_showError(req,res,response.statusCode);
 				console.log(response.message);
@@ -145,7 +147,9 @@ var _showError = function(req,res, status){
 var renderReviewForm = function(req,res, locDetail){
 	res.render('location-review-form', {
 		title: 'Review '+locDetail.name + ' on Loc8r',
-		pageHeader: { title: 'Review '+locDetail.name}
+		pageHeader: { title: 'Review '+locDetail.name},
+		error: req.query.err 	//send new error variable to view, passing it query parameter when it exists
+		//query object is always part of req. No need to check whether is exists
 	});
 }; 
 

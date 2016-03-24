@@ -60,3 +60,4 @@ The app is currently deployed onto Heroku https://learnmean.herokuapp.com/ and c
   * Solution: call sendJsonResponse twice and update res.status twice. Make sure only 1 res being sent. [reference](http://stackoverflow.com/questions/7042340/node-js-error-cant-set-headers-after-they-are-sent)
 3. No "API lookup error" shows.
   * Solution: condition (!x instanse of Array) should be written as (!(x instance of Array)) to check whether x is Array
+4. Routing naming and typo took me much time to debug. How do we improve it?

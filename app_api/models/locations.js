@@ -12,10 +12,10 @@ var openingTimeSchema = new mongoose.Schema({
 
 //use 'anonymouse' as default
 var reviewSchema = new mongoose.Schema({
-	author: {type: String, "default": 'anonymous'},
-	rating: {type: Number, "default": 0, min: 0, max: 5},
+	author: {type: String, required: true},
+	rating: {type: Number, "default": 0, min: 0, max: 5, required: true},
 	createdOn: {type: Date, "default": Date.now},
-	reviewText: String
+	reviewText: {type: String, required: true}
 });
 
 var locationSchema = new mongoose.Schema({	//constructor func for new schema
